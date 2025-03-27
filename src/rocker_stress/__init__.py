@@ -1,0 +1,2 @@
+"""Compute stress inside rocker."""
+
