@@ -50,5 +50,5 @@ if __name__ == "__main__":
                 name=f"{rname}_{dname}",
                 rocking=rpattern,
                 dish=dish,
-                viscosity=1e-3,
+                viscosity=0.9e-3,
             )
