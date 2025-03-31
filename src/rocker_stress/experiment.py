@@ -14,14 +14,17 @@ class Experiment:
     dish: Dish
     viscosity: float
 
+    def fluid_flux(self, ntimes: int) -> TimeSeries:
+        flip = self.rocking.angle(ntimes)
+        return self.dish.fluid_flux(flip)
+
     def shear_stress(self, ntimes: int) -> TimeSeries:
         lub = LubricationLister92(
             dynamic_viscosity=self.viscosity,
             height=self.dish.fluid_height,
             width=self.dish.cross_length,
         )
-        flip = self.rocking.angle(ntimes)
-        flux = self.dish.fluid_flux(flip)
+        flux = self.fluid_flux(ntimes)
         return lub.shear_stress_bottom(flux)
 
 
@@ -35,3 +38,15 @@ class ShearStressPlot(Plot):
         ax.plot(stress.times, stress.values)
         ax.set_xlabel("time (s)")
         ax.set_ylabel("stress (Pa)")
+
+
+@dataclass(frozen=True)
+class FluidFluxPlot(Plot):
+    experiment: Experiment
+    ntimes: int
+
+    def draw_on(self, ax: mpla.Axes) -> None:
+        flux = self.experiment.fluid_flux(ntimes=self.ntimes)
+        ax.plot(flux.times, flux.values)
+        ax.set_xlabel("time (s)")
+        ax.set_ylabel("flux (m3/s)")

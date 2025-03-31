@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 from lazympl.figure import SinglePlotFigure
 
-from rocker_stress.experiment import Experiment, ShearStressPlot
+from rocker_stress.experiment import Experiment, FluidFluxPlot, ShearStressPlot
 from rocker_stress.zhou2010 import (
     ConstantRocking,
     CylDish,
@@ -24,6 +24,12 @@ def main(
         dish=dish,
         viscosity=viscosity,
     )
+    SinglePlotFigure(
+        plot=FluidFluxPlot(
+            experiment=exp,
+            ntimes=100,
+        )
+    ).save_to(f"flux_{name}.pdf")
     SinglePlotFigure(
         plot=ShearStressPlot(
             experiment=exp,
